@@ -1,5 +1,6 @@
 # disk-wrapping-witness
 
+
 A small explicit, exactly certified nonconvex wrapping of a disk.
 
 This repository accompanies the preprint **“A Certified Nonconvex Wrapping of a Disk with Volume Greater than the Sphere.”** It contains a 17-vertex, 30-face polyhedral witness together with two independent exact-arithmetic verification programs.
