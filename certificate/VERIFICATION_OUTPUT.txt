@@ -1,0 +1,22 @@
+=== Verifier A ===
+CERTIFIED
+V,E,F = 17 45 30 Euler = 2
+triangle pairs = {1: 130, 2: 45, 0: 260} (all intersections exactly prescribed)
+nonconvex witness: face 0 has J and a2 on opposite sides
+volume exact = 359686988325832312742347877865122384142690317017149/2000000000000000000000000000000000000000000000000000
+volume decimal = 0.17984349416291615
+volume > 0.179843 = True
+all 30 triangle maps are strictly 1-Lipschitz
+
+=== Verifier B ===
+INDEPENDENT CERTIFICATE VERIFIED
+V,E,F = 17 45 30 Euler = 2
+triangle pairs = {1: 130, 2: 45, 0: 260} (barycentric exact-feasibility method)
+nonconvex witness: face 0 has J and a2 on opposite sides
+volume exact = 359686988325832312742347877865122384142690317017149/2000000000000000000000000000000000000000000000000000
+volume decimal = 0.17984349416291615
+all 30 triangle maps strictly 1-Lipschitz in Q(sqrt(5))
+
+=== Optimization-flag check ===
+Verifier A also passes under python -O.
+Verifier B also passes under python -O.
