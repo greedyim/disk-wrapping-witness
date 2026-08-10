@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+title: "A Certified Nonconvex Wrapping of a Disk with Volume Greater than the Sphere"
+message: "If you use this construction or certificate, please cite this repository/preprint."
+type: software
+authors:
+  - family-names: Hoshino
+    given-names: Sho
+repository-code: "https://github.com/greedyim/disk-wrapping-witness"
+date-released: 2026-08-11
