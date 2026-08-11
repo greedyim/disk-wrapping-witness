@@ -67,6 +67,18 @@ Question 1 asks only whether \(D_\pi\) can wrap some nonconvex solid of volume g
 
 Accordingly, the main contribution of this repository is **quantitative**: a certified lower bound for \(W(1)\) that strictly exceeds a sharp natural symmetry class.
 
+## Build the preprint
+
+Compile from the repository root so the figure and section paths resolve:
+
+```bash
+pdflatex paper/preprint.tex
+pdflatex paper/preprint.tex
+pdflatex paper/preprint.tex
+```
+
+The checked PDF distributed with the current release/source package has 14 pages.
+
 ## Exact verification
 
 Two independent exact-arithmetic programs certify the polyhedral witness. They check:
@@ -104,8 +116,8 @@ and the exact rational value
 
 ## Files
 
-- [`paper/preprint.pdf`](paper/preprint.pdf) — current preprint
-- [`paper/preprint.tex`](paper/preprint.tex) — LaTeX source
+- [`paper/preprint.tex`](paper/preprint.tex) — current LaTeX source
+- [`paper/sections/`](paper/sections/) — modular paper sections
 - [`certificate/exact_certificate.py`](certificate/exact_certificate.py) — exact verifier A
 - [`certificate/independent_verify.py`](certificate/independent_verify.py) — independent exact verifier B
 - [`certificate/VERIFICATION_OUTPUT.txt`](certificate/VERIFICATION_OUTPUT.txt) — reference output
