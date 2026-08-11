@@ -1,0 +1,25 @@
+\section{Verification protocol and reproducibility}\label{sec:repro}
+The accompanying repository contains two independent exact verifiers together with a \texttt{README.md} giving the exact commands, dependencies, and expected certificate output.
+
+\subsubsection*{Verifier A}
+\texttt{certificate/exact\_certificate.py}.\par
+Target coordinates use Python's \texttt{fractions.Fraction}; source metric expressions use exact symbolic arithmetic in $\mathbb Q(\sqrt5)$.  Triangle intersections are tested by exact plane-section interval arithmetic.
+
+\subsubsection*{Verifier B}
+\texttt{certificate/independent\_verify.py}.\par
+This implementation does not use SymPy.  It contains a hand-written $\mathbb Q(\sqrt5)$ arithmetic type, checks orientability by propagation on the dual graph, and tests triangle intersections by the barycentric feasibility method described in \cref{lem:embedded}.
+
+Both programs independently return the same exact rational volume and the same intersection counts
+\[
+260+130+45=435.
+\]
+A successful run prints, among other diagnostics,
+\begin{verbatim}
+V,E,F = 17 45 30 Euler = 2
+triangle pairs = {1: 130, 2: 45, 0: 260}
+volume decimal = 0.17984349416291615
+all 30 triangle maps are strictly 1-Lipschitz
+\end{verbatim}
+
+The scale factor $\lambda=0.99999$ is intentionally conservative.  It creates a strict nonexpansion margin while preserving the combinatorial and intersection structure under uniform scaling.  The theorem makes no optimality claim about the displayed solid.
+
