@@ -1,0 +1,51 @@
+\section{Discussion}
+The extremal problem can now be summarized by the normalized bracket
+\begin{equation}\label{eq:finalbracket}
+0.17984349416291615\ldots
+\le W(1)
+\le\frac{\pi}{6}
+=0.523598775598\ldots,
+\end{equation}
+together with the exact solution of the rotational-radial subclass,
+\begin{equation}\label{eq:finalrot}
+W_{\rm rev}^{\rm rad}(1)
+=0.152315527\ldots
+<W(1).
+\end{equation}
+The present construction therefore supplies more than a large isolated example: it proves a strict separation between a natural symmetry class with a known sharp optimum and the unrestricted wrapping problem.
+
+The soft argument in \cref{sec:soft} shows why qualitative nonconvexity is not, by itself, the phenomenon of interest.  A tiny inward notch already answers Nandakumar's Question~1 under the stated $1$-Lipschitz formalization.  More strongly, \cref{thm:rotational} shows that even arbitrary nonconvex rotational profiles remain capped by the Mylar value.  The improvement in \cref{thm:main} is therefore tied to leaving the rotational-radial class.  The single non-axisymmetric pleat of the certified witness crosses that sharp barrier by about $18.07\%$.
+
+We use the phrase \emph{symmetry breaking} only at the level of optimal values: \eqref{eq:finalrot} proves that the unrestricted supremum is strictly larger than the rotational-radial supremum.  We do not prove that $W(1)$ is attained, nor that every maximizing sequence must lose rotational symmetry in any stronger sense.
+
+The universal upper bound in \cref{prop:upper} is deliberately coarse.  Equality in the area-isoperimetric argument would require both essentially full use of the source area and an almost spherical target, while the target must simultaneously arise as a $1$-Lipschitz quotient of a flat disk with its boundary self-glued.  Quantifying this additional metric obstruction is a natural route to substantially better upper bounds.
+
+This suggests a concrete research program.  The primary open problem is to determine the constant $W(1)$.  Intermediate goals are to improve the certified lower bound by optimizing or enlarging the seam network, to lower the universal upper bound $\pi/6$, and to decide whether the supremum is attained.  A second structural question is to identify further restricted classes whose optimal values can be solved exactly, as the rotational-radial class is here.  Each such class provides a meaningful barrier against which genuinely three-dimensional folding mechanisms can be measured.
+
+The use of a piecewise-affine source map is distinct from the problem of finding a neat isometric origami folding.  Work of Demaine and Ku shows that, for polygonal boundaries folded nonexpansively at finitely many points, compatible isometric mappings of the polygon interior exist under their model~\cite{DemaineKu2014}.  The present proof does not invoke that theorem: the full non-neat $1$-Lipschitz map is written down directly and independently certified for self-intersection.
+
+\section*{Acknowledgements}
+The coordinate configuration was found by computer-assisted geometric search.  The final proof was reorganized into a finite exact certificate and checked by two independent implementations.  External verification of both the mathematical interpretation and the code is encouraged.
+
+\begin{thebibliography}{9}
+\bibitem{Nandakumar2026}
+R.~Nandakumar,
+\newblock \emph{On the maximum volume solid wrappable by a given sheet of paper},
+\newblock arXiv:2604.02925v1 [math.MG], 2026.
+
+\bibitem{Paulsen1994}
+W.~H. Paulsen,
+\newblock \emph{What Is the Shape of a Mylar Balloon?},
+\newblock Amer. Math. Monthly \textbf{101} (1994), no.~10, 953--958.
+
+\bibitem{MladenovOprea2003}
+I.~M. Mladenov and J.~Oprea,
+\newblock \emph{The Mylar Balloon Revisited},
+\newblock Amer. Math. Monthly \textbf{110} (2003), no.~9, 761--784.
+
+\bibitem{DemaineKu2014}
+E.~D. Demaine and J.~S. Ku,
+\newblock \emph{Filling a Hole in a Crease Pattern: Isometric Mapping of a Polygon given a Folding of its Boundary},
+\newblock in \emph{Origami$^6$: Proceedings of the 6th International Meeting on Origami in Science, Mathematics and Education}, American Mathematical Society, pp.~177--188, 2014; arXiv:1410.6520.
+\end{thebibliography}
+
