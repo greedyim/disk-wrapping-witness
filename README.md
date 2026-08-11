@@ -1,31 +1,49 @@
 # disk-wrapping-witness
 
+A certified quantitative lower bound for the maximum volume wrappable by a disk.
 
-A small explicit, exactly certified nonconvex wrapping of a disk.
-
-This repository accompanies the preprint **“A Certified Nonconvex Wrapping of a Disk with Volume Greater than the Sphere.”** It contains a 17-vertex, 30-face polyhedral witness together with two independent exact-arithmetic verification programs.
+This repository accompanies the preprint **“A Certified Lower Bound for the Maximum Volume Wrappable by a Disk.”** It contains a 17-vertex, 30-face nonconvex polyhedral witness together with two independent exact-arithmetic verification programs.
 
 ## Main result
 
-For every source radius \(R>0\), the construction gives a continuous 1-Lipschitz map from the closed disk \(D_R\subset\mathbb R^2\) onto an embedded nonconvex polyhedral 2-sphere bounding a solid of volume
+For the closed disk \(D_R\) of radius \(R\), write
 
 \[
-V = C R^3,
+W(R)=\sup\{\operatorname{Vol}(B): B \text{ is wrappable by } D_R\}
+\]
+
+in the 1-Lipschitz wrapping formalization used by Nandakumar. The certified construction proves
+
+\[
+W(R) \ge C R^3,
 \qquad
-C = 0.17984349416291615\ldots
+C=0.17984349416291615\ldots,
 \]
 
 where \(C\) is represented exactly by a rational number in the certificate.
 
-For \(R=\pi\), this exceeds \(4\pi/3\), the volume of the unit ball. The construction is intended as a **small explicit and exactly certified witness** for the disk-wrapping question discussed by Nandakumar. We do **not** claim priority for abstract existence alone; related volume-increasing isometric-deformation results of Bleecker and Pak may imply the general existence phenomenon indirectly.
+More concretely, the source disk maps continuously and 1-Lipschitz onto an embedded nonconvex polyhedral 2-sphere with 17 vertices and 30 triangular faces.
 
-For comparison, the classical Mylar balloon gives the sharp convex axisymmetric benchmark
+## Why this is stronger than Nandakumar's Question 1
+
+Nandakumar's Question 1 asks whether \(D_\pi\) can wrap *some* nonconvex solid with volume greater than \(4\pi/3\). Under the stated 1-Lipschitz formalization, that qualitative question has a short soft affirmative answer and does not require the polyhedral certificate.
+
+Take an oblate spheroid with equatorial radius \(23/20\) and polar radius \(4/5\). Its volume is greater than that of the unit ball, while a Cauchy-Schwarz estimate shows that its north-south meridian length is strictly less than \(\pi\). A sufficiently small inward rotational notch preserves both strict inequalities and makes the body nonconvex. Any surface of revolution whose generating north-south meridian has length \(L\le R\) is wrapped by \(D_R\) via a direct radial 1-Lipschitz map.
+
+Accordingly, the point of this repository is the **substantially stronger quantitative bound** \(C=0.179843494\ldots\), not merely existence of a nonconvex improvement over the sphere.
+
+For comparison, the classical Mylar balloon is the sharp convex body-of-revolution benchmark
 
 \[
-V_{\mathrm{Mylar}} = 0.152315527\ldots R^3,
+V_{\mathrm{Mylar}}=0.152315527\ldots R^3,
 \]
 
-so the certified nonconvex witness has about 18.07% larger volume.
+so the certified coefficient is about 18.07% larger. No claim is made that Mylar is optimal among all convex bodies wrappable by a disk.
+
+## Preprint
+
+- [`paper/preprint.pdf`](paper/preprint.pdf)
+- [`paper/preprint.tex`](paper/preprint.tex)
 
 ## Exact verification
 
@@ -47,10 +65,10 @@ python certificate/exact_certificate.py
 python certificate/independent_verify.py
 ```
 
-Both report the decimal volume
+Both report
 
 ```text
-0.17984349416291615
+volume decimal = 0.17984349416291615
 ```
 
 and the exact rational value
@@ -62,6 +80,6 @@ and the exact rational value
 
 ## Status
 
-This is a research preprint / external-review candidate. The claim is intentionally narrower than a general solution of the disk-wrapping maximization problem: the contribution is the explicit witness, its quantitative lower bound, and a reproducible exact certificate.
+Research preprint / external-review candidate. The current claim is deliberately quantitative: an explicit, reproducible lower bound for disk-wrapping volume. It does not determine the optimum and does not solve Nandakumar's general conjecture.
 
-Feedback, independent verification, and pointers to prior equivalent constructions are very welcome.
+Feedback, independent verification, and pointers to prior equivalent constructions or bounds are very welcome.
