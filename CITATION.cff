@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: "A Certified Nonconvex Wrapping of a Disk with Volume Greater than the Sphere"
+title: "A Certified Lower Bound for the Maximum Volume Wrappable by a Disk"
 message: "If you use this construction or certificate, please cite this repository/preprint."
 type: software
 authors:
