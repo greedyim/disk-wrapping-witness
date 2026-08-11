@@ -42,8 +42,16 @@ so the certified coefficient is about 18.07% larger. No claim is made that Mylar
 
 ## Preprint
 
-- [`paper/preprint.pdf`](paper/preprint.pdf)
 - [`paper/preprint.tex`](paper/preprint.tex)
+
+Compile from the repository root so the figure paths resolve:
+
+```bash
+pdflatex paper/preprint.tex
+pdflatex paper/preprint.tex
+```
+
+The compiled PDF is distributed alongside the current source package and can be placed at `paper/preprint.pdf`.
 
 ## Exact verification
 
