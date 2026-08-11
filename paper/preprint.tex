@@ -13,6 +13,7 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{remark}[theorem]{Remark}
 \usepackage[nameinlink,noabbrev]{cleveref}
 \crefname{theorem}{Theorem}{Theorems}
@@ -21,13 +22,15 @@
 \Crefname{lemma}{Lemma}{Lemmas}
 \crefname{corollary}{Corollary}{Corollaries}
 \Crefname{corollary}{Corollary}{Corollaries}
+\crefname{proposition}{Proposition}{Propositions}
+\Crefname{proposition}{Proposition}{Propositions}
 \crefname{remark}{Remark}{Remarks}
 \Crefname{remark}{Remark}{Remarks}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Vol}{\operatorname{Vol}}
 \newcommand{\Lip}{\operatorname{Lip}}
 
-\title{A Certified Nonconvex Wrapping of a Disk\\with Volume Greater than the Sphere}
+\title{A Certified Lower Bound for the Maximum Volume\\Wrappable by a Disk}
 \author{Sho Hoshino}
 \date{August 11, 2026}
 
@@ -35,33 +38,35 @@
 \maketitle
 
 \begin{abstract}
-We give an explicit computer-assisted construction of a nonconvex solid wrapped by a disk without stretching.  For every $R>0$ we construct a continuous $1$-Lipschitz map from the closed disk $D_R\subset\R^2$ onto an embedded polyhedral $2$-sphere bounding a nonconvex solid $B_R$ of volume
+For the closed disk $D_R\subset\R^2$, let
 \[
-\Vol(B_R)=C R^3,
-\qquad
-C=0.17984349416291615\ldots .
+W(R):=\sup\{\Vol(B): B\text{ is wrappable by }D_R\}
 \]
-The constant $C$ is given by an exact rational number.  In particular, for $R=\pi$ the volume exceeds $4\pi/3$, the volume of the unit ball.  Under the $1$-Lipschitz formalization of wrapping used by Nandakumar, this gives a small explicit and exactly certified witness for his Question~1.  We do not claim priority for abstract existence alone: Nandakumar explicitly points to the volume-increasing isometric deformations of Bleecker and Pak as potentially implying the conjectural phenomenon~\cite{Bleecker1996,Pak2008,Nandakumar2026}.  Our contribution is a direct $17$-vertex, $30$-face construction with an exact, independently reproducible certificate and a quantitative lower bound.  The requirement that the comparison body be nonconvex remains essential to the intent of Question~1, and our result should not be read as proving Nandakumar's full conjecture for the disk.
+in the $1$-Lipschitz wrapping formalization of Nandakumar.  We prove the explicit certified lower bound
+\[
+W(R)\ge C R^3,
+\qquad
+C=0.17984349416291615\ldots,
+\]
+where $C$ is an exact rational number.  More precisely, we give a $17$-vertex, $30$-face embedded nonconvex polyhedral sphere and a continuous $1$-Lipschitz map from $D_R$ onto it.  Two independent exact-arithmetic programs certify strict nonexpansion on all $30$ source triangles, the topology of the quotient complex, all $435$ triangle-pair intersections, nonconvexity, and the exact enclosed volume.
 
-For context, the classical Mylar balloon is the sharp volume maximizer among convex bodies of revolution of intrinsic diameter $R$, with volume $0.152315527\ldots R^3$.  We give below an explicit radial $1$-Lipschitz map from $D_R$ onto this surface, making its wrappability by the single disk completely self-contained.  Thus the certified nonconvex example is about $18.07\%$ larger than this sharp axisymmetric convex benchmark as well as larger than the sphere.  The construction is based on a regular decagon with a single pleat in its boundary identification and is verified by two independent exact-arithmetic programs.  The certificate checks strict nonexpansion on all $30$ source triangles, the topology of the quotient complex, all $435$ triangle-pair intersections, a nonconvexity witness, and the exact enclosed volume.  No floating-point assertion is used in the proof certificate.
+Nandakumar's Question~1 asks only whether $D_\pi$ can wrap some nonconvex solid of volume greater than $4\pi/3$.  Under the stated $1$-Lipschitz formalization, that question has a short soft affirmative answer: an oblate spheroid with equatorial radius $23/20$ and polar radius $4/5$ has volume greater than the unit ball and north--south meridian length strictly less than $\pi$; a sufficiently small inward rotational notch preserves both strict inequalities while making the body nonconvex.  A simple radial lemma then gives a $1$-Lipschitz wrap by $D_\pi$.  Thus the point of the certified polyhedral construction is not existence of a nonconvex improvement over the sphere, but the substantially stronger quantitative lower bound above.  For comparison, the classical Mylar balloon is the sharp convex body-of-revolution benchmark with coefficient $0.152315527\ldots$, so our certified coefficient is about $18.07\%$ larger.
 \end{abstract}
 
 \section{Introduction}
-Nandakumar recently formulated a volume-maximization problem for wrapping three-dimensional solids by a planar sheet that may be folded or wrinkled but not stretched or torn~\cite{Nandakumar2026}.  In his formalization, a planar region $D$ wraps a compact connected solid when the relevant closed surface is realized by a $1$-Lipschitz image of $D$, with the boundary of $D$ glued to itself in the image.  His main conjecture is explicitly \emph{nonconvex}: for every convex solid $B$ wrappable by a given nondegenerate connected sheet $D$, there should exist a nonconvex solid $B'$ wrappable by the same sheet with
-\[
-\Vol(B')>\Vol(B).
-\]
-As a concrete test case he takes $D$ to be the disk of radius $\pi$ and $B$ to be the unit ball, and asks whether that disk can wrap a \emph{nonconvex} solid of volume strictly larger than $4\pi/3$~\cite[Claim~1 and Question~1]{Nandakumar2026}.  Thus the adjective ``nonconvex'' is not incidental: producing a larger convex body would not answer the stated subquestion.
+Nandakumar recently formulated a volume-maximization problem for wrapping three-dimensional solids by a planar sheet that may be folded or wrinkled but not stretched or torn~\cite{Nandakumar2026}.  In his formalization, a planar region $D$ wraps a compact connected solid when its boundary surface is realized by a $1$-Lipschitz image of $D$, with the boundary of $D$ glued to itself in the image.  For the disk $D_R$ of radius $R$, it is therefore natural to write
+\begin{equation}\label{eq:Wdef}
+W(R):=\sup\{\Vol(B):B\text{ is wrappable by }D_R\}.
+\end{equation}
+Scaling gives $W(R)=R^3W(1)$ whenever the supremum is interpreted in this fixed formalization, so the main quantitative problem is to understand the dimensionless constant $W(1)$.
 
-There is substantial prior evidence for the underlying existence phenomenon.  Bleecker proved that the surface of a generic convex polyhedron admits an isometric deformation enclosing greater volume~\cite{Bleecker1996}; Pak later gave a particularly simple explicit inflation of the cube and summarized the broader polyhedral picture~\cite{Pak2008}.  Nandakumar himself therefore notes that his conjecture may conceivably be a corollary of this circle of results~\cite[Section~3]{Nandakumar2026}.  We accordingly make no claim that abstract existence for Question~1 is new.  Establishing a complete indirect implication in the present disk setting would require additional approximation and wrappability arguments that are unnecessary for our theorem, so we do not assert such an implication here.
+Nandakumar's main conjecture is explicitly nonconvex: every wrappable convex solid should be beaten in volume by some wrappable nonconvex solid~\cite[Claim~1]{Nandakumar2026}.  His Question~1 fixes the unit ball as a test case and asks whether $D_\pi$ can wrap a nonconvex solid of volume greater than $4\pi/3$~\cite[Question~1]{Nandakumar2026}.  A subsequent MathOverflow remark by Nandakumar already records convex wrappable bodies with volume larger than the unit sphere~\cite{NandakumarMO2026}.  Under the stated $1$-Lipschitz formalization, one can go one step further: as shown in \cref{sec:soft}, a tiny inward dent of a suitably chosen oblate spheroid gives a short elementary affirmative answer to Question~1.  Thus Question~1 itself is not the quantitative difficulty addressed here.
 
-The purpose of this note is instead to give a very small, fully explicit, quantitatively strong witness.  We specify the source triangulation, the target coordinates, and the piecewise-affine map completely.  The proof does not require an existence theorem for an unspecified folding.  The only computer-assisted part is the exhaustive verification of a finite collection of exact algebraic inequalities and intersection tests.  Two implementations using different arithmetic and different triangle-intersection algorithms are supplied as supplementary material.
+The purpose of this note is to give a substantially stronger explicit lower bound for \eqref{eq:Wdef}.  The construction is finite and completely specified: we give the source triangulation, target coordinates, and piecewise-affine map.  The proof then reduces to a finite exact certificate.  Two supplied implementations use different arithmetic and different triangle-intersection algorithms.
 
-It is useful to separate this statement from the stronger main conjecture.  Our theorem treats the particular convex comparison body chosen in Question~1, namely the unit ball.  It does \emph{not} show that every convex body wrappable by the disk is beaten by our example, nor that our example exceeds the supremum of volumes of convex bodies wrappable by the disk.  In particular, the sphere is not the strongest known convex benchmark; the classical Mylar balloon already gives a larger convex body wrappable by the same disk after matching intrinsic diameter.  We record this comparison precisely in \cref{sec:context}.
+Our main result is the following.
 
-The geometry was discovered by numerical search, but the theorem below depends only on the final rational coordinate certificate.  The construction can be viewed as a ``one-pleat'' analogue of a dumpling: most of the boundary forms a doubled seam while one short branch stores excess boundary length.  The informal analogy plays no role in the proof.
-
-\begin{theorem}[Certified one-pleat disk wrapping]\label{thm:main}
+\begin{theorem}[Certified disk-wrapping lower bound]\label{thm:main}
 Let $D_R\subset\R^2$ be the closed disk of radius $R>0$.  There exists a continuous $1$-Lipschitz map
 \[
 F_R:D_R\longrightarrow\R^3
@@ -80,23 +85,128 @@ C=
 }
 =0.17984349416291615\ldots .
 \]
-In particular, $C>0.179843$.
+In particular,
+\[
+W(R)\ge C R^3>0.179843R^3.
+\]
 \end{theorem}
 
-\begin{corollary}\label[corollary]{cor:nandakumar}
-A disk of radius $\pi$ wraps a nonconvex solid of volume strictly greater than $4\pi/3$.
-\end{corollary}
-
-Indeed, \cref{thm:main} gives $\Vol(B_\pi)>0.179843\pi^3$.  Since $\pi>3$,
+The classical Mylar balloon provides a useful convex benchmark.  Among convex bodies of revolution with intrinsic diameter $R$, it has the sharp volume
 \[
-0.179843\pi^3>9(0.179843)\pi=1.618587\pi>\frac43\pi.
+V_{\rm Mylar}(R)=0.152315527\ldots R^3,
 \]
-Thus \cref{cor:nandakumar} provides an explicit exactly certified witness for Question~1 of~\cite{Nandakumar2026} under its stated $1$-Lipschitz wrapping formalization.
+and it is itself wrappable by the single disk $D_R$.  Hence \cref{thm:main} improves this axisymmetric convex benchmark by about $18.07\%$.  We do not claim that Mylar is optimal among all convex bodies wrappable by $D_R$, nor do we claim to determine $W(R)$.
 
-\section{Relation to Nandakumar's conjecture and a convex benchmark}\label{sec:context}
-The logical role of \cref{cor:nandakumar} is worth making explicit.  Nandakumar's Claim~1 compares \emph{each} wrappable convex body with some larger wrappable nonconvex body~\cite[Claim~1]{Nandakumar2026}.  Question~1 fixes one such convex body, the unit ball, and asks for a corresponding nonconvex improvement~\cite[Question~1]{Nandakumar2026}.  Our construction supplies a particularly small explicit improvement, but we do not claim that the existence of some improvement is new: the volume-increasing polyhedral deformations of Bleecker and Pak provide mechanisms closely related to this question~\cite{Bleecker1996,Pak2008}, as Nandakumar observes~\cite[Section~3]{Nandakumar2026}.  The novelty sought here is the concrete certified witness and its quantitative lower bound.  In particular, the construction does not prove Claim~1 for all convex bodies wrappable by a disk.
+The geometry of the certified witness was discovered by numerical search, but the theorem depends only on the final rational-coordinate certificate.  Its boundary identification has one short pleat branch and otherwise consists of doubled seam segments; no physical analogy is needed in the proof.
 
-There is also a natural convex comparison stronger than the sphere.  The classical Mylar balloon is the convex surface of revolution arising from the fixed-meridian-length volume-maximization problem studied by Paulsen and subsequently by Mladenov and Oprea~\cite{Paulsen1994,MladenovOprea2003}.  For a convex body of revolution, the intrinsic diameter equals the north--south meridian length $R$.  Indeed, in meridional arclength coordinates $(s,\theta)$ the surface metric has the form $ds^2+\varrho(s)^2d\theta^2$, with $0\le s\le R$.  Any two points at arclengths $s_1,s_2$ can be joined through one of the poles with length at most
+\section{A soft affirmative answer to Nandakumar's Question~1}\label{sec:soft}
+We first isolate a simple observation that applies to convex and nonconvex surfaces of revolution alike.
+
+\begin{lemma}[Radial wrapping of a surface of revolution]\label{lem:radial}
+Let
+\[
+\gamma(s)=(\varrho(s),z(s)),\qquad 0\le s\le L,
+\]
+be a simple rectifiable arc in the half-plane $\varrho\ge0$, parametrized by arclength, with
+\[
+\varrho(0)=\varrho(L)=0,
+\qquad
+\varrho(s)>0\quad(0<s<L).
+\]
+Let $S$ be the embedded surface obtained by revolving $\gamma$ about the $z$-axis.  If $L\le R$, then $D_R$ wraps the bounded solid enclosed by $S$ in Nandakumar's $1$-Lipschitz sense.
+\end{lemma}
+
+\begin{proof}
+Set $q=L/R\le1$.  In polar coordinates $(r,\theta)$ on $D_R$, define
+\[
+F(r,\theta)=
+\bigl(\varrho(qr)\cos\theta,\,\varrho(qr)\sin\theta,\,z(qr)\bigr).
+\]
+Since $\gamma$ is parametrized by arclength,
+\[
+\varrho'(s)^2+z'(s)^2=1
+\]
+for almost every $s$, so $|\varrho'|\le1$.  Because $\varrho(0)=0$,
+\[
+0\le\varrho(s)\le s.
+\]
+Away from the rotation axis the pullback metric is
+\[
+F^*g=q^2\,dr^2+\varrho(qr)^2\,d\theta^2
+\le q^2\bigl(dr^2+r^2d\theta^2\bigr)
+\le dr^2+r^2d\theta^2.
+\]
+Integrating lengths of curves and using continuity at the axis gives $\Lip(F)\le q\le1$.  The map is onto $S$, while the whole boundary circle $r=R$ is sent to the endpoint $\gamma(L)$ on the axis.  Hence the disk boundary is self-glued and the image is the closed surface $S$.
+\end{proof}
+
+\begin{proposition}[A soft answer to Question~1]\label{prop:softQ1}
+A disk of radius $\pi$ wraps a nonconvex solid of volume strictly greater than $4\pi/3$.
+\end{proposition}
+
+\begin{proof}
+Consider the oblate spheroid with equatorial radius
+\[
+a=\frac{23}{20}
+\]
+and polar radius
+\[
+c=\frac45.
+\]
+Its volume is
+\[
+V_0=\frac{4\pi}{3}a^2c
+=\frac{4\pi}{3}\frac{529}{500}
+>\frac{4\pi}{3}.
+\]
+A north--south generating meridian is
+\[
+\gamma_0(t)=(a\sin t,c\cos t),\qquad 0\le t\le\pi.
+\]
+If $L_0$ denotes its length, Cauchy--Schwarz gives
+\begin{align*}
+L_0^2
+&=\left(\int_0^\pi
+\sqrt{a^2\cos^2t+c^2\sin^2t}\,dt\right)^2\\
+&\le \pi\int_0^\pi
+\bigl(a^2\cos^2t+c^2\sin^2t\bigr)\,dt\\
+&=\pi^2\frac{a^2+c^2}{2}
+=\pi^2\frac{157}{160}<\pi^2.
+\end{align*}
+Thus $L_0<\pi$ with strict slack.
+
+We now make an arbitrarily small inward notch near the equator.  For $\delta>0$ small, put
+\[
+h=c\sin\delta,
+\qquad
+p_\pm=(a\cos\delta,\pm h).
+\]
+Replace the elliptical arc between $p_+$ and $p_-$ by the two line segments joining these points to
+\[
+v=(a\cos\delta-\varepsilon,0),
+\qquad
+0<\varepsilon<a\cos\delta.
+\]
+Because the ellipse is convex, the two new segments lie inside it.  Revolving the modified simple meridian gives an embedded solid $B_{\delta,\varepsilon}$ obtained from the spheroid by a rotational inward notch.
+
+Its meridian length satisfies
+\[
+L_{\delta,\varepsilon}
+\le L_0+2\sqrt{h^2+\varepsilon^2},
+\]
+so for sufficiently small $\delta$ and $\varepsilon$ we still have $L_{\delta,\varepsilon}<\pi$.  The removed volume lies inside the slab $|z|\le h$ and the cylinder $\varrho\le a$, hence
+\[
+0\le V_0-\Vol(B_{\delta,\varepsilon})
+\le 2\pi a^2h.
+\]
+Since $h\to0$ with $\delta\to0$ and $V_0>4\pi/3$, the volume remains greater than $4\pi/3$ for sufficiently small $\delta$.
+
+Finally, the meridional cross-section is nonconvex: it contains $p_+$ and $p_-$, but their midpoint $(a\cos\delta,0)$ lies outside the notched body because the new boundary radius at $z=0$ is $a\cos\delta-\varepsilon$.  Therefore $B_{\delta,\varepsilon}$ is nonconvex.  Applying \cref{lem:radial} with $R=\pi$ completes the proof.
+\end{proof}
+
+Thus the qualitative content of Question~1 follows without computer assistance.  The rest of the paper concerns the stronger quantitative problem of pushing the coefficient in \eqref{eq:Wdef} upward with a fully explicit certificate.
+
+\section{A convex benchmark}\label{sec:context}
+The classical Mylar balloon is the convex surface of revolution arising from the fixed-meridian-length volume-maximization problem studied by Paulsen and subsequently by Mladenov and Oprea~\cite{Paulsen1994,MladenovOprea2003}.  For a convex body of revolution, the intrinsic diameter equals the north--south meridian length $R$.  Indeed, in meridional arclength coordinates $(s,\theta)$ the surface metric has the form $ds^2+\varrho(s)^2d\theta^2$, with $0\le s\le R$.  Any two points at arclengths $s_1,s_2$ can be joined through one of the poles with length at most
 \[
 \min\{s_1+s_2,\,2R-s_1-s_2\}\le R,
 \]
@@ -104,150 +214,213 @@ whereas every path from the north pole to the south pole has length at least $\i
 
 For completeness, the sharpness of the Mylar profile in this class admits a short global argument.  Parametrize the meridian by arclength and write it as $(\varrho(s),z(s))$.  For a general convex meridian these coordinate functions are Lipschitz; throughout this paragraph derivatives are understood almost everywhere.  Convexity makes $z$ monotone and $\varrho$ increase from $0$ to its maximum $a$ and then decrease to $0$.  Hence
 \[
-\Vol=\pi\int_0^R \varrho^2\sqrt{1-\varrho'^2}\,ds.
+\frac{V}{\pi}=\int_0^R \varrho^2\sqrt{1-\varrho'^2}\,ds.
 \]
-For every $0\le\varrho\le a$ and $|\varrho'|\le1$, Cauchy--Schwarz gives
+For every $0\le\varrho\le a$, Cauchy--Schwarz gives
 \[
 \varrho^2\sqrt{1-\varrho'^2}
-+|\varrho'|\sqrt{a^4-\varrho^4}\le a^2.
++|\varrho'|\sqrt{a^4-\varrho^4}
+\le a^2.
 \]
-Integrating and using monotonicity of $\varrho$ on the two halves yields
+After integration and the monotonicity of the two halves of the meridian,
 \[
-\frac{\Vol}{\pi}
-\le a^2R-2\int_0^a\sqrt{a^4-r^4}\,dr.
-\]
-Writing
-\[
-I=\int_0^1\frac{du}{\sqrt{1-u^4}},
+\frac{V}{\pi}
+\le a^2R-2\int_0^a\sqrt{a^4-u^4}\,du
+=a^2R-2Ka^3,
 \qquad
-K=\int_0^1\sqrt{1-u^4}\,du=\frac23I,
+K:=\int_0^1\sqrt{1-u^4}\,du.
 \]
-we obtain
-\[
-\frac{\Vol}{\pi}\le a^2R-2Ka^3.
-\]
-The right-hand side is maximized at $a=R/(3K)=R/(2I)$, and therefore
-\[
-\Vol\le\frac{\pi}{12I^2}R^3.
-\]
-Equality in Cauchy--Schwarz requires
+The right-hand side is maximized at $a=R/(3K)$.  Since $K=2I/3$ for the constant $I$ below, this is $a=R/(2I)$.  Equality in Cauchy--Schwarz requires, on each monotone half of the meridian,
 \[
 |\varrho'|=\sqrt{1-(\varrho/a)^4},
+\qquad
+\sqrt{1-\varrho'^2}=\frac{\varrho^2}{a^2}.
 \]
-whose integration over the two monotone halves gives $R=2aI$.  Thus the bound is attained by the classical Mylar profile and is sharp.  Since
+Integrating the first relation from a pole to the equator and back gives
 \[
-I=\frac{\sqrt\pi\,\Gamma(1/4)}{4\Gamma(3/4)},
+R=2a\int_0^1\frac{du}{\sqrt{1-u^4}}=2aI,
 \]
-this sharp value is
-\[
-V_{\rm Mylar}(R)=\frac{4}{3}
-\left(\frac{\Gamma(3/4)}{\Gamma(1/4)}\right)^2R^3
-=0.1523155270926\ldots R^3.
-\]
+so the equality profile has exactly the maximizing value $a=R/(2I)$.  This is the classical Mylar profile, and hence the upper bound is attained.
 
-Its wrappability by the \emph{single} disk $D_R$ can be checked without invoking any general exponential-map theorem.  Parametrize the Mylar surface by the same meridional arclength $s$ and azimuth $\theta$, and define
-\[
-\Phi(s,\theta)=
-(\varrho(s)\cos\theta,\varrho(s)\sin\theta,z(s)),
-\qquad 0\le s\le R.
-\]
-Because $|\varrho'|\le1$ and $\varrho(0)=0$, we have $\varrho(s)\le s$.  Therefore the pullback metric satisfies
-\[
-\Phi^*g=ds^2+\varrho(s)^2d\theta^2
-\le ds^2+s^2d\theta^2,
-\]
-which is exactly the Euclidean polar metric on $D_R$.  Thus $\Phi:D_R\to\partial B_{\rm Mylar}$ is $1$-Lipschitz and onto; the boundary circle $s=R$ collapses to the south pole.  Consequently the Mylar body is wrappable by $D_R$ under the same formalization.  Our nonconvex example has volume coefficient $C=0.179843494\ldots$, about $18.07\%$ larger than the sharp axisymmetric convex benchmark.
-
-\section{The source triangulation and seam data}\label{sec:source}
-We normalize to $R=1$ until the final scaling step.  Let $H$ be the regular decagon inscribed in $D_1$, with vertices
-\[
-o_k=(\cos(2\pi k/10),\sin(2\pi k/10)),
-\qquad k=0,\ldots,9.
-\]
 Let
 \[
-i_k=\rho o_k,
-\qquad \rho=\frac{13}{20},
+I=\int_0^1\frac{du}{\sqrt{1-u^4}}
+=\frac{\sqrt\pi\,\Gamma(1/4)}{4\Gamma(3/4)}.
 \]
-and let $z=(0,0)$.  We triangulate $H$ by the $30$ triangles
-\[
-(z,i_k,i_{k+1}),\qquad
-(i_k,o_k,o_{k+1}),\qquad
-(i_k,o_{k+1},i_{k+1}),
-\]
-for $k\in\mathbb Z/10\mathbb Z$.
-
-The outer vertices are identified according to the cyclic word
-\begin{equation}\label{eq:boundarywords}
-A_2,A_1,J,C,J,B_1,B_2,B_1,J,A_1,
+The Mylar volume is
+\begin{equation}\label{eq:mylar}
+V_{\rm Mylar}(R)
+=\frac{\pi}{12I^2}R^3
+=\frac43\left(\frac{\Gamma(3/4)}{\Gamma(1/4)}\right)^2R^3
+=0.152315527\ldots R^3.
 \end{equation}
-where
+Its generating meridian has length $R$, so \cref{lem:radial} gives a direct $1$-Lipschitz wrap by the single disk $D_R$.  This uses the Mylar balloon only as a target body; it does not identify the source with the doubled circular sheets used in the classical physical construction.
+
+For comparison, the sphere of radius $R/\pi$ also has north--south meridian length $R$, and hence is wrapped by $D_R$ by the same lemma.  Its volume is
 \[
-(o_0,\ldots,o_9)
-\mapsto
-(A_2,A_1,J,C,J,B_1,B_2,B_1,J,A_1).
+V_{\rm sph}(R)=\frac{4}{3\pi^2}R^3=0.1350949115\ldots R^3.
 \]
-Thus the seam is a tree with one short branch $JC$.  This is the ``one-pleat'' feature of the construction.
+Thus the explicit benchmarks are
+\begin{center}
+\begin{tabular}{@{}lc@{}}
+\toprule
+body & volume divided by $R^3$\\
+\midrule
+sphere & $0.1350949115\ldots$\\
+sharp convex body-of-revolution Mylar benchmark & $0.1523155270\ldots$\\
+certified nonconvex body of this paper & $0.1798434942\ldots$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The certified construction therefore exceeds the Mylar benchmark by about $18.07\%$.  This is only a benchmark within the convex axisymmetric class; no optimality among all convex wrappable bodies is asserted.
 
-The inner vertices $i_k$ and the center $z$ remain distinct.  Hence after quotienting the outer boundary vertices the combinatorial complex has
+\section{The source complex and the one-pleat seam}\label{sec:source}
+It suffices to construct the case $R=1$; scaling source and target by $R$ then multiplies volume by $R^3$.
+
+Let $H$ be the regular decagon inscribed in the unit circle, with outer vertices
 \[
-V=17,\qquad E=45,\qquad F=30.
+o_k=(\cos(2\pi k/10),\sin(2\pi k/10)),\qquad k=0,\ldots,9.
 \]
-The target coordinates of the $17$ vertices are exact rationals.  They are listed in the supplementary certificate and omitted here only to keep the body of the paper readable; the certificate is part of the statement's reproducible data.
+Set
+\[
+\rho=\frac{13}{20},\qquad i_k=\rho o_k,
+\]
+and let $z=(0,0)$ be the center.  Triangulate $H$ by the $30$ triangles
+\begin{align*}
+&(z,i_k,i_{k+1}),\\
+&(i_k,o_k,o_{k+1}),\\
+&(i_k,o_{k+1},i_{k+1}),
+\end{align*}
+with indices modulo $10$.  All squared source lengths lie in $\mathbb Q(\sqrt5)$.
 
-\section{Exact verification of the target surface}\label{sec:cert}
-Let $g:H\to\R^3$ be the piecewise-affine map determined by the certified target coordinates.  The proof of the normalized case reduces to five finite exact checks.
+The ten outer vertices are identified in cyclic order as
+\begin{equation}\label{eq:boundarywords}
+A_2,\ A_1,\ J,\ C,\ J,\ B_1,\ B_2,\ B_1,\ J,\ A_1.
+\end{equation}
+Thus the boundary traces the graph
+\[
+A_2-A_1-J-C-J-B_1-B_2-B_1-J-A_1-A_2.
+\]
+Every seam edge is traversed twice in opposite directions, and the branch $J-C-J$ is the single pleat.  The ten inner vertices and the center remain distinct.  Hence the quotient has $17$ vertices.
 
-\subsection{Strict nonexpansion on every source triangle}
+\begin{figure}[t]
+\centering
+\includegraphics[width=.92\textwidth]{figures/construction_multiview.pdf}
+\caption{The source triangulation and four opaque views of the certified target surface.  Red edges indicate the seam graph; the points $C$ and $J$ are marked in the target views.  In particular, the opposite, near-side, and top views make clear that $C$ is a vertex of the polyhedral surface, not an interior point.  The drawings are for visualization only; the proof uses the exact coordinates in \cref{sec:coordinates}.}
+\label{fig:construction}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.50\textwidth]{figures/seam_graph.pdf}
+\caption{Combinatorial seam graph.  The branch $JC$ is the single pleat.  The actual target coordinates are not coplanar and are listed in \cref{sec:coordinates}.}
+\label{fig:seam}
+\end{figure}
+
+\section{Explicit target coordinates}\label{sec:coordinates}
+Let
+\[
+\lambda=\frac{99999}{100000}.
+\]
+Each target vertex is $\lambda$ times the finite-decimal vector in \cref{tab:coords}.  Every displayed decimal is interpreted as an exact rational number.  The affine image of each source triangle is determined by the images of its three vertices.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Base target coordinates before multiplication by $\lambda=99999/100000$.}
+\label{tab:coords}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+vertex & $x$ & $y$ & $z$\\
+\midrule
+$J$ & 0.114996453431 & 0.652042463578 & 0.359274110539\\
+$A_1$ & 0.713527595885 & 0.556758865942 & 0.238247176413\\
+$A_2$ & 0.904510611077 & 0.150919970833 & -0.186942534628\\
+$B_1$ & -0.269259146678 & 0.427202794161 & 0.787947375499\\
+$B_2$ & -0.411232941130 & -0.173302559313 & 0.822628398965\\
+$C$ & -0.407447365206 & 0.632905197995 & 0.029649729336\\
+$z$ & 0 & 0 & 0\\
+$I_0$ & 0.650000000000 & 0 & 0\\
+$I_1$ & 0.525861046344 & 0.382060413990 & 0\\
+$I_2$ & 0.201227167335 & 0.617682813279 & 0.021807551587\\
+$I_3$ & -0.138361314859 & 0.605243587298 & -0.192448295874\\
+$I_4$ & -0.192247060016 & 0.586039489637 & 0.205179883277\\
+$I_5$ & -0.332154604650 & 0.312020954927 & 0.463482731389\\
+$I_6$ & -0.424437564120 & -0.078307526511 & 0.486025395896\\
+$I_7$ & -0.126467920004 & 0.156558885543 & 0.618057586773\\
+$I_8$ & 0.208351084601 & 0.348929212409 & 0.507285156764\\
+$I_9$ & 0.525861046344 & 0.263795278601 & 0.276373318043\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Let $g:H\to\R^3$ denote the resulting continuous piecewise-affine map.  Continuity holds because adjacent triangles use the same target coordinates on their common vertices, including the identifications in \eqref{eq:boundarywords}.
+
+\section{Exact certification}\label{sec:certificate}
+We now establish the geometric properties of $g$.  All sign and intersection assertions in this section are checked by exact arithmetic in the supplied programs; the verification methods are described explicitly so that the certificate is finite and reproducible.
+
+\subsection{Strict nonexpansion on every triangle}
+For a source triangle choose two edge vectors $u,v$ from a common vertex and set
+\[
+S=\begin{pmatrix}
+\langle u,u\rangle & \langle u,v\rangle\\
+\langle u,v\rangle & \langle v,v\rangle
+\end{pmatrix}.
+\]
+Let $T$ be the corresponding Gram matrix of the target edge vectors.  A tangent vector with coordinate column $\xi\in\R^2$ has squared source length $\xi^TS\xi$ and squared target length $\xi^TT\xi$.  Thus the affine triangle map is strictly nonexpansive if
+\[
+S-T\succ0.
+\]
+
 \begin{lemma}\label[lemma]{lem:lip}
-The map $g$ is $1$-Lipschitz.
+For each of the $30$ source triangles, $S-T$ is positive definite.  Hence $g$ is $1$-Lipschitz on $H$.
 \end{lemma}
 
 \begin{proof}
-For each source triangle choose two edge vectors and form its $2\times2$ Gram matrix $S$.  For the corresponding target triangle form the target Gram matrix $T$.  The affine map on that triangle is nonexpanding exactly when
+For a real symmetric $2\times2$ matrix, positive definiteness is equivalent to positivity of the two diagonal entries and of the determinant.  The verifier computes, for each triangle,
 \[
-S-T\succeq0.
+(S-T)_{11}>0,\qquad (S-T)_{22}>0,\qquad \det(S-T)>0.
 \]
-The source entries lie in $\mathbb Q(\sqrt5)$ and the target entries in $\mathbb Q$.  The certificate checks, in exact arithmetic, that for all $30$ triangles
+The source terms lie in $\mathbb Q(\sqrt5)$ and the target terms are rational; signs in $\mathbb Q(\sqrt5)$ are reduced to rational comparisons by squaring only after the signs of the rational coefficients are known.  Thus no floating-point sign decision is used.
+
+To pass from triangles to the whole decagon, take $x,y\in H$.  Convexity of $H$ implies that the segment $[x,y]$ remains in $H$ and crosses finitely many source triangles.  On each subsegment the image curve has length at most the source subsegment length.  Summing yields
 \[
-S-T\succ0,
+|g(x)-g(y)|\le \operatorname{length}(g([x,y]))\le |x-y|.
 \]
-using positive principal minors.  Thus every triangle map is strictly $1$-Lipschitz.  Since the source triangulation is finite and the maps agree on shared edges, lengths of polygonal paths cannot increase; taking infima over polygonal approximations of the segment joining two source points proves that $g$ is globally $1$-Lipschitz.
 \end{proof}
 
-\subsection{The quotient is a topological sphere}
+\subsection{The quotient is a sphere}
 \begin{lemma}\label[lemma]{lem:sphere}
-The quotient triangulation is a connected closed orientable $2$-manifold with Euler characteristic $2$; hence it is homeomorphic to $S^2$.
+The quotient triangulation is a connected closed orientable triangulated $2$-manifold with
+\[
+V=17,\qquad E=45,\qquad F=30,
+\]
+and hence is topologically $S^2$.
 \end{lemma}
 
 \begin{proof}
-The certificate enumerates the quotient edges and verifies that every one of the $45$ edges belongs to exactly two faces.  It also computes the link of every one of the $17$ quotient vertices and checks that each link is a single cycle.  Thus the complex is a closed connected $2$-manifold.  A breadth-first propagation of face orientations across the dual graph succeeds without contradiction, proving orientability.  Finally,
+The exact combinatorial verifier checks that every edge belongs to exactly two faces, every vertex link is one cycle, the complex is connected, and the listed face orientations agree oppositely along each shared edge.  Hence it is a connected closed orientable $2$-manifold.  Its Euler characteristic is
 \[
-\chi=V-E+F=17-45+30=2.
+17-45+30=2,
 \]
-The classification theorem for closed orientable surfaces gives $S^2$.
+so the classification of closed orientable surfaces gives $S^2$.
 \end{proof}
 
 \subsection{No unintended triangle intersections}
 \begin{lemma}\label[lemma]{lem:embedded}
-The geometric realization of the quotient sphere is embedded.
+The geometric realization of the quotient complex is embedded in $\R^3$.
 \end{lemma}
 
 \begin{proof}
-There are $\binom{30}{2}=435$ unordered triangle pairs.  The certificate classifies each pair by its prescribed common simplex and solves the exact intersection problem independently.
-
-One verifier intersects triangle planes and reduces the test to overlap of exact rational intervals.  A second implementation instead solves
+There are $\binom{30}{2}=435$ unordered face pairs.  The independent verifier tests intersection by solving exactly
 \[
-a+\alpha(b-a)+\beta(c-a)
-=d+\gamma(e-d)+\delta(f-d)
+A_0+\alpha(A_1-A_0)+\beta(A_2-A_0)
+=
+B_0+\gamma(B_1-B_0)+\delta(B_2-B_0)
 \]
-subject to
+under the barycentric inequalities
 \[
-\alpha,\beta,\gamma,\delta\ge0,
-\quad
-\alpha+\beta\le1,
-\quad
-\gamma+\delta\le1.
+\alpha,\beta,1-\alpha-\beta,\gamma,\delta,1-\gamma-\delta\ge0.
 \]
 The three coordinate equations have rank $3$ in every tested pair, leaving one affine parameter.  The six inequalities become rational interval constraints on that parameter.
 
@@ -350,14 +523,14 @@ The cyclic word \eqref{eq:boundarywords} traverses each of the five seam segment
 Scaling both the planar domain and the target by $R$ defines $F_R$ and gives $\Vol(B_R)=R^3\Vol(B_1)$.  Together, \cref{lem:lip,lem:sphere,lem:embedded,lem:nonconvex,lem:volume,lem:projection,lem:boundarygluing} prove \cref{thm:main}.
 
 \section{Verification protocol and reproducibility}\label{sec:repro}
-The supplementary archive contains two independent exact verifiers together with a \texttt{README.md} giving the exact commands, dependencies, and expected certificate output.
+The accompanying repository contains two independent exact verifiers together with a \texttt{README.md} giving the exact commands, dependencies, and expected certificate output.
 
 \subsubsection*{Verifier A}
-\texttt{gyoza\_1pleat\_exact\_certificate.py}.\par
+\texttt{certificate/exact\_certificate.py}.\par
 Target coordinates use Python's \texttt{fractions.Fraction}; source metric expressions use exact symbolic arithmetic in $\mathbb Q(\sqrt5)$.  Triangle intersections are tested by exact plane-section interval arithmetic.
 
 \subsubsection*{Verifier B}
-\texttt{gyoza\_1pleat\_independent\_verify.py}.\par
+\texttt{certificate/independent\_verify.py}.\par
 This implementation does not use SymPy.  It contains a hand-written $\mathbb Q(\sqrt5)$ arithmetic type, checks orientability by propagation on the dual graph, and tests triangle intersections by the barycentric feasibility method described in \cref{lem:embedded}.
 
 Both programs independently return the same exact rational volume and the same intersection counts
@@ -375,15 +548,19 @@ all 30 triangle maps are strictly 1-Lipschitz
 The scale factor $\lambda=0.99999$ is intentionally conservative.  It creates a strict nonexpansion margin while preserving the combinatorial and intersection structure under uniform scaling.  The theorem makes no optimality claim about the displayed solid.
 
 \section{Discussion}
-The construction establishes only a lower bound for the maximum volume wrappable by a disk:
+The main conclusion is the certified lower bound
 \[
-\sup\{\Vol(B):B\text{ is wrappable by }D_R\}\ge C R^3.
+W(R)\ge C R^3,
+\qquad
+C=0.17984349416291615\ldots .
 \]
-It does not identify the supremum, nor does it claim that one pleat is optimal.  More importantly for the interpretation of Nandakumar's conjecture, it does not determine the supremum restricted to convex wrappable bodies.  The present theorem should therefore be read as a small explicit and exactly certified witness for the particular nonconvex sphere-comparison problem in Question~1, not as a claim of first abstract existence and not as a proof of Claim~1 for the disk.  The Mylar comparison in \cref{sec:context} illustrates why this distinction matters: the sharp convex body-of-revolution benchmark already improves substantially on the sphere, while our construction improves further and is explicitly nonconvex.
+The construction does not identify $W(R)$ and makes no claim that one pleat is optimal.  It also does not determine the supremum restricted to convex wrappable bodies.  The Mylar comparison is therefore deliberately modest: it shows that the certified witness is quantitatively well beyond the sharp convex body-of-revolution benchmark, not that it beats every convex body wrappable by a disk.
 
-The use of a piecewise-affine source map is also distinct from the problem of finding a neat isometric origami folding.  Work of Demaine and Ku shows that, for polygonal boundaries folded nonexpansively at finitely many points, compatible isometric mappings of the polygon interior exist under their model~\cite{DemaineKu2014}.  The present proof does not invoke that theorem: the full non-neat $1$-Lipschitz map is written down directly and independently certified for self-intersection.
+The soft argument in \cref{sec:soft} changes the interpretation of Nandakumar's Question~1.  Under the stated $1$-Lipschitz formalization, nonconvexity by itself is easy to introduce once one has a rotational wrap with strict meridian-length and volume slack.  A tiny inward notch already gives an affirmative answer.  The more substantive extremal question is how much volume can be enclosed, and the exact coefficient $C$ should be viewed as a concrete lower bound for that problem rather than as a certificate needed merely to establish nonconvex existence.
 
-A natural next problem is to replace the regular decagon by finer polygonal approximations and optimize the crease network while retaining an exact certificate.  Another, logically distinct, problem is to understand the best convex body wrappable by a disk.  Neither question is needed for the present result: a finite one-pleat construction gives a direct, compact certificate for the specific nonconvex improvement asked for in Nandakumar's Question~1 by a robust margin.
+The use of a piecewise-affine source map is distinct from the problem of finding a neat isometric origami folding.  Work of Demaine and Ku shows that, for polygonal boundaries folded nonexpansively at finitely many points, compatible isometric mappings of the polygon interior exist under their model~\cite{DemaineKu2014}.  The present proof does not invoke that theorem: the full non-neat $1$-Lipschitz map is written down directly and independently certified for self-intersection.
+
+Natural next problems are to optimize the present crease network, to search for larger certified coefficients using finer source complexes, and to understand the best convex body wrappable by a disk.  Any improvement of the first two types would raise the explicit lower bound on $W(1)$; the convex problem would clarify how much of the gain is genuinely tied to nonconvexity.
 
 \section*{Acknowledgements}
 The coordinate configuration was found by computer-assisted geometric search.  The final proof was reorganized into a finite exact certificate and checked by two independent implementations.  External verification of both the mathematical interpretation and the code is encouraged.
@@ -394,6 +571,11 @@ R.~Nandakumar,
 \newblock \emph{On the maximum volume solid wrappable by a given sheet of paper},
 \newblock arXiv:2604.02925v1 [math.MG], 2026.
 
+\bibitem{NandakumarMO2026}
+R.~Nandakumar,
+\newblock \emph{A claim on wrapping 3D solids with a sheet of paper},
+\newblock MathOverflow question 508997, 2026; remark added April 21, 2026.
+
 \bibitem{Paulsen1994}
 W.~H. Paulsen,
 \newblock \emph{What Is the Shape of a Mylar Balloon?},
@@ -403,16 +585,6 @@ W.~H. Paulsen,
 I.~M. Mladenov and J.~Oprea,
 \newblock \emph{The Mylar Balloon Revisited},
 \newblock Amer. Math. Monthly \textbf{110} (2003), no.~9, 761--784.
-
-\bibitem{Bleecker1996}
-D.~D. Bleecker,
-\newblock \emph{Volume increasing isometric deformations of convex polyhedra},
-\newblock J. Differential Geom. \textbf{43} (1996), no.~3, 505--526.
-
-\bibitem{Pak2008}
-I.~Pak,
-\newblock \emph{Inflating the cube without stretching},
-\newblock Amer. Math. Monthly \textbf{115} (2008), no.~5, 443--445; arXiv:math/0607754.
 
 \bibitem{DemaineKu2014}
 E.~D. Demaine and J.~S. Ku,
